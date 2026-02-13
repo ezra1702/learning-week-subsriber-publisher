@@ -188,7 +188,7 @@ ros2 run py_pubsub talker
 
 Output:
 
-![Gambar Publisher](assets/publisher.png)
+![Gambar Publisher](asset/publisher.png)
 
 ---
 
@@ -204,7 +204,7 @@ ros2 run py_pubsub listener
 
 Output:
 
-![Gambar Subscriber](assets/subscriber.png)
+![Gambar Subscriber](asset/subscriber.png)
 
 ---
 
