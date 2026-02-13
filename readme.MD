@@ -1,13 +1,21 @@
-#  Learning Week ROS 2 Publisher & Subscriber 
+SIAP 🔥
+Ini sudah saya tambahkan bagian **LEARNING WEEK ASSIGNMENT** di bawah modul yang kamu kirim. Sudah rapi dan siap copy–paste ke `README.md`.
+
+---
+
+# Learning Week ROS 2 Publisher & Subscriber
 
 Membuat sistem komunikasi sederhana di ROS 2 menggunakan:
-- Publisher (Talker)
-- Subscriber (Listener)
-- Publisher akan mengirim pesan setiap 1 detik, dan Subscriber akan menerima serta menampilkannya.
+
+* Publisher (Talker)
+* Subscriber (Listener)
+* Publisher akan mengirim pesan setiap 1 detik, dan Subscriber akan menerima serta menampilkannya.
+
 ---
+
 # STEP 1 — Buat Workspace
 
-Buat folder projek : 
+Buat folder projek :
 
 ```bash
 mkdir -p ros2_ws/src
@@ -18,7 +26,7 @@ cd ros2_ws
 
 # STEP 2 — Source ROS 2
 
-Pastikan ROS 2 sudah terinstall : 
+Pastikan ROS 2 sudah terinstall :
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -98,13 +106,9 @@ if __name__ == '__main__':
     main()
 ```
 
-Simpan dan keluar.
-
 ---
 
 # STEP 5 — Buat Subscriber
-
-Masih di folder yang sama:
 
 ```bash
 nano subscriber.py
@@ -147,21 +151,9 @@ if __name__ == '__main__':
 
 ---
 
-#  STEP 6 — Edit package.xml
+# STEP 6 — Edit package.xml
 
-Kembali ke folder:
-
-```bash
-cd ..
-```
-
-Buka:
-
-```bash
-nano package.xml
-```
-
-Tambahkan di dalam `<package>`:
+Tambahkan:
 
 ```xml
 <exec_depend>rclpy</exec_depend>
@@ -170,15 +162,7 @@ Tambahkan di dalam `<package>`:
 
 ---
 
-#  STEP 7 — Edit setup.py
-
-Buka:
-
-```bash
-nano setup.py
-```
-
-Ubah bagian entry_points menjadi:
+# STEP 7 — Edit setup.py
 
 ```python
 entry_points={
@@ -189,35 +173,21 @@ entry_points={
 },
 ```
 
-Simpan.
-
 ---
 
 # STEP 8 — Build
 
-Kembali ke root workspace:
-
 ```bash
 cd ../../
-```
-
-Build:
-
-```bash
 colcon build
 ```
 
 ---
 
 # STEP 9 — Jalankan Publisher
-Jalankan workspace :
+
 ```bash
 source install/setup.bash
-```
-
-Terminal 1:
-
-```bash
 ros2 run py_pubsub talker
 ```
 
@@ -227,7 +197,7 @@ Output:
 
 ---
 
-# STEP 11 — Jalankan Subscriber
+# STEP 10 — Jalankan Subscriber
 
 Terminal 2:
 
@@ -239,8 +209,99 @@ ros2 run py_pubsub listener
 
 Output:
 
-```
 ![Gambar Subscriber](assets/subscriber.png)
+
+---
+
+# 🚀 LEARNING WEEK ASSIGNMENT
+
+
+Berdasarkan project yang telah dibuat, lakukan pengembangan sistem menjadi:
+
+###  2 Publisher dan 1 Subscriber
+
+---
+
+## Ketentuan
+
+### 1️⃣ Publisher 1
+
+* Topic: `/topic1`
+* Publish setiap 1 detik
+* Format pesan:
+
+  ```
+  From Publisher 1: <counter>
+  ```
+
+### Publisher 2
+
+* Topic: `/topic2`
+* Publish setiap 2 detik
+* Format pesan:
+
+  ```
+  From Publisher 2: <counter>
+  ```
+
+###  Subscriber
+
+* Harus subscribe ke:
+
+  * `/topic1`
+  * `/topic2`
+* Gunakan 2 callback berbeda
+* Output harus dibedakan:
+
+Contoh:
+
+```
+[TOPIC1] From Publisher 1: 0
+[TOPIC2] From Publisher 2: 0
+[TOPIC1] From Publisher 1: 1
+```
+
+---
+
+## Ketentuan Teknis
+
+* Tambahkan file:
+
+  * `publisher1.py`
+  * `publisher2.py`
+* Edit `setup.py` dan tambahkan:
+
+```python
+'publisher1 = py_pubsub.publisher1:main',
+'publisher2 = py_pubsub.publisher2:main',
+```
+
+* Build ulang:
+
+```bash
+colcon build
+```
+
+---
+
+##  Cara Menjalankan
+
+Terminal 1:
+
+```bash
+ros2 run py_pubsub publisher1
+```
+
+Terminal 2:
+
+```bash
+ros2 run py_pubsub publisher2
+```
+
+Terminal 3:
+
+```bash
+ros2 run py_pubsub listener
 ```
 
 ---
