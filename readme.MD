@@ -1,8 +1,3 @@
-SIAP 🔥
-Ini sudah saya tambahkan bagian **LEARNING WEEK ASSIGNMENT** di bawah modul yang kamu kirim. Sudah rapi dan siap copy–paste ke `README.md`.
-
----
-
 # Learning Week ROS 2 Publisher & Subscriber
 
 Membuat sistem komunikasi sederhana di ROS 2 menggunakan:
