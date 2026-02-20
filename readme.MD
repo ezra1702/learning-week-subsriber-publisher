@@ -446,7 +446,7 @@ From Publisher 2: <counter>
 
 * Harus subscribe ke:
 
-  * `/topic1`
+  * `/topic1`a
   * `/topic2`
 * Gunakan 2 callback berbeda
 * Output harus dibedakan:
