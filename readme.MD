@@ -405,6 +405,15 @@ Subscriber akan menerima dan menampilkan pesan dari topic.
 
 ---
 
+# Alur Komunikasi Sistem
+
+1. Publisher membuat pesan bertipe String.
+2. Pesan dikirim ke topic bernama `topic`.
+3. Subscriber yang mendengarkan topic tersebut menerima pesan.
+4. Callback subscriber dipanggil.
+5. Pesan ditampilkan di terminal.
+
+---
 
 # Referensi
 
@@ -413,6 +422,8 @@ Tutorial resmi ROS 2:
 [https://docs.ros.org/en/foxy/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html](https://docs.ros.org/en/foxy/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html)
 
 ---
+
+
 # TUGAS KINGGGGG
 Berdasarkan project yang telah dibuat, lakukan pengembangan sistem menjadi:
 
@@ -446,7 +457,7 @@ From Publisher 2: <counter>
 
 * Harus subscribe ke:
 
-  * `/topic1`a
+  * `/topic1`
   * `/topic2`
 * Gunakan 2 callback berbeda
 * Output harus dibedakan:
