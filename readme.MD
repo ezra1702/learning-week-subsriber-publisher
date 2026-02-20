@@ -1,43 +1,82 @@
 # Learning Week ROS 2 Publisher & Subscriber
 
-Membuat sistem komunikasi sederhana di ROS 2 menggunakan:
+Dokumentasi ini menjelaskan pembuatan sistem komunikasi sederhana menggunakan arsitektur Publisher–Subscriber pada ROS 2 dengan bahasa Python.
+
+Sistem terdiri dari:
 
 * Publisher (Talker)
 * Subscriber (Listener)
-* Publisher akan mengirim pesan setiap 1 detik, dan Subscriber akan menerima serta menampilkannya.
+
+Publisher mengirimkan pesan setiap 1 detik ke sebuah topic, dan Subscriber menerima serta menampilkan pesan tersebut.
 
 ---
 
-# STEP 1 — Buat Workspace
+# Konsep Dasar
 
-Buat folder projek :
+## Node
+
+Node adalah unit eksekusi dalam ROS 2. Setiap program yang berjalan di dalam ROS 2 disebut node. Node dapat berperan sebagai publisher, subscriber, service server, service client, dan lainnya.
+
+## Topic
+
+Topic adalah saluran komunikasi yang digunakan oleh publisher dan subscriber untuk bertukar data. Publisher mengirim pesan ke topic, dan subscriber menerima pesan dari topic tersebut.
+
+## Message
+
+Message adalah tipe data yang dikirim melalui topic. Dalam contoh ini digunakan tipe `String` dari package `std_msgs`.
+
+## Publisher–Subscriber
+
+Publisher mengirim data ke topic tanpa mengetahui siapa yang menerima. Subscriber mendengarkan topic tanpa mengetahui siapa yang mengirim. Sistem ini bersifat asynchronous dan loosely coupled.
+
+---
+
+# STEP 1 — Membuat Workspace
+
+Workspace adalah direktori kerja tempat seluruh package ROS 2 disimpan dan dibangun.
 
 ```bash
 mkdir -p ros2_ws/src
 cd ros2_ws
 ```
 
+Struktur workspace:
+
+```
+ros2_ws/
+ ├── src/
+ ├── build/
+ ├── install/
+ └── log/
+```
+
+Folder `src` digunakan untuk menyimpan package.
+
 ---
 
 # STEP 2 — Source ROS 2
 
-Pastikan ROS 2 sudah terinstall :
+Sebelum menggunakan ROS 2, environment harus diaktifkan.
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 ```
 
-Cek:
+Perintah ini mengatur environment variable agar sistem mengenali perintah `ros2`.
+
+Verifikasi instalasi:
 
 ```bash
 which ros2
 ```
 
+Jika berhasil, sistem akan menampilkan lokasi executable ROS 2.
+
 ---
 
-# STEP 3 — Buat Package Python
+# STEP 3 — Membuat Package Python
 
-Masuk ke folder src:
+Masuk ke folder `src`:
 
 ```bash
 cd src
@@ -49,11 +88,27 @@ Buat package:
 ros2 pkg create --build-type ament_python py_pubsub
 ```
 
+Penjelasan:
+
+* `ros2 pkg create` membuat package baru.
+* `--build-type ament_python` digunakan untuk package berbasis Python.
+* `py_pubsub` adalah nama package.
+
+Struktur yang dihasilkan:
+
+```
+py_pubsub/
+ ├── package.xml
+ ├── setup.py
+ ├── py_pubsub/
+ └── resource/
+```
+
 ---
 
-# STEP 4 — Buat Publisher
+# STEP 4 — Membuat Publisher
 
-Masuk ke folder python:
+Masuk ke folder Python:
 
 ```bash
 cd py_pubsub/py_pubsub
@@ -65,7 +120,7 @@ Buat file:
 nano publisher.py
 ```
 
-Isi dengan:
+Isi file:
 
 ```python
 import rclpy
@@ -101,57 +156,51 @@ if __name__ == '__main__':
     main()
 ```
 
-## Penjelasan STEP 4 (Publisher)
+## Penjelasan Publisher
 
-Bagian import:
+### Import
 
-```python
-import rclpy
-from rclpy.node import Node
-from std_msgs.msg import String
-```
+* `rclpy` adalah client library ROS 2 untuk Python.
+* `Node` adalah class dasar untuk membuat node.
+* `String` adalah tipe pesan teks dari `std_msgs`.
 
-* `rclpy` adalah library utama ROS 2 untuk Python.
-* `Node` digunakan sebagai class dasar untuk membuat node.
-* `String` adalah tipe pesan standar untuk mengirim data teks.
-
-Class Publisher:
+### Class Publisher
 
 ```python
 class Publisher(Node):
 ```
 
-Node di ROS 2 adalah unit eksekusi program. Publisher merupakan node yang bertugas mengirim data ke sebuah topic.
+Publisher merupakan turunan dari class `Node`. Ini berarti Publisher adalah sebuah node dalam sistem ROS 2.
 
-Constructor:
+### Constructor
 
 ```python
 super().__init__('publisher_node')
 ```
 
-Memberikan nama node yaitu `publisher_node`. Nama ini akan terlihat jika menjalankan perintah `ros2 node list`.
+Memberikan nama node yaitu `publisher_node`.
 
-Membuat publisher:
+### Membuat Publisher
 
 ```python
 self.publisher_ = self.create_publisher(String, 'topic', 10)
 ```
 
-Penjelasan:
+Parameter:
 
-* `String` → tipe pesan yang dikirim.
-* `'topic'` → nama topic komunikasi.
-* `10` → ukuran queue (jumlah pesan yang bisa ditampung sementara).
+* `String` adalah tipe pesan.
+* `'topic'` adalah nama topic komunikasi.
+* `10` adalah ukuran queue untuk menyimpan pesan sementara.
 
-Membuat timer:
+### Timer
 
 ```python
 self.timer = self.create_timer(1.0, self.timer_callback)
 ```
 
-Timer akan memanggil fungsi `timer_callback` setiap 1 detik. Artinya publisher mengirim pesan secara periodik setiap 1 detik.
+Timer memanggil fungsi `timer_callback` setiap 1 detik.
 
-Counter:
+### Counter
 
 ```python
 self.count = 0
@@ -159,83 +208,36 @@ self.count = 0
 
 Digunakan untuk menghitung jumlah pesan yang telah dikirim.
 
-Fungsi callback:
+### Fungsi Callback
 
-```python
-def timer_callback(self):
-```
+Fungsi `timer_callback` dijalankan secara periodik oleh timer.
 
-Fungsi ini otomatis dijalankan setiap 1 detik oleh timer.
+Langkah di dalamnya:
 
-Membuat pesan:
+1. Membuat objek pesan.
+2. Mengisi data pesan.
+3. Mengirim pesan ke topic.
+4. Menampilkan log ke terminal.
+5. Menambah nilai counter.
 
-```python
-msg = String()
-msg.data = f'Hello World {self.count}'
-```
+### Fungsi main
 
-Membuat objek pesan bertipe String lalu mengisi data teks.
-
-Mengirim pesan:
-
-```python
-self.publisher_.publish(msg)
-```
-
-Pesan dikirim ke topic `'topic'`.
-
-Menampilkan log:
-
-```python
-self.get_logger().info(f'Publishing: {msg.data}')
-```
-
-Menampilkan pesan di terminal untuk memastikan data terkirim.
-
-Menambah counter:
-
-```python
-self.count += 1
-```
-
-Agar angka bertambah setiap kali pesan dikirim.
-
-Bagian main:
-
-```python
-rclpy.init(args=args)
-```
-
-Menginisialisasi sistem ROS 2.
-
-```python
-node = Publisher()
-```
-
-Membuat instance node Publisher.
-
-```python
-rclpy.spin(node)
-```
-
-Menjalankan node agar terus aktif dan memproses event.
-
-```python
-node.destroy_node()
-rclpy.shutdown()
-```
-
-Membersihkan node dan mematikan ROS 2 dengan aman.
+* `rclpy.init()` menginisialisasi sistem ROS.
+* Membuat instance node Publisher.
+* `rclpy.spin()` menjaga node tetap aktif.
+* `destroy_node()` dan `shutdown()` membersihkan resource.
 
 ---
 
-# STEP 5 — Buat Subscriber
+# STEP 5 — Membuat Subscriber
+
+Buat file:
 
 ```bash
 nano subscriber.py
 ```
 
-Isi dengan:
+Isi file:
 
 ```python
 import rclpy
@@ -270,27 +272,21 @@ if __name__ == '__main__':
     main()
 ```
 
-## Penjelasan STEP 5 (Subscriber)
+## Penjelasan Subscriber
 
-Bagian import sama seperti publisher karena tetap menggunakan `rclpy`, `Node`, dan `String`.
+### Class Subscriber
 
-Class Subscriber:
+Subscriber adalah node yang menerima pesan dari topic.
 
-```python
-class Subscriber(Node):
-```
-
-Subscriber adalah node yang bertugas menerima data dari topic.
-
-Constructor:
+### Constructor
 
 ```python
 super().__init__('subscriber_node')
 ```
 
-Memberikan nama node yaitu `subscriber_node`.
+Memberikan nama node `subscriber_node`.
 
-Membuat subscription:
+### Membuat Subscription
 
 ```python
 self.subscription = self.create_subscription(
@@ -301,50 +297,53 @@ self.subscription = self.create_subscription(
 )
 ```
 
-Penjelasan:
+Parameter:
 
-* `String` → tipe pesan yang diterima.
-* `'topic'` → harus sama dengan topic publisher.
-* `self.listener_callback` → fungsi yang dijalankan saat pesan diterima.
-* `10` → ukuran queue.
+* `String` adalah tipe pesan.
+* `'topic'` harus sama dengan publisher.
+* `self.listener_callback` adalah fungsi yang dipanggil saat pesan diterima.
+* `10` adalah ukuran queue.
 
-Fungsi callback:
+### Callback Function
 
-```python
-def listener_callback(self, msg):
-```
-
-Fungsi ini otomatis dijalankan setiap kali ada pesan baru dari topic.
-
-Menampilkan pesan:
+Fungsi ini otomatis dijalankan setiap ada pesan masuk.
 
 ```python
 self.get_logger().info(f'I heard: {msg.data}')
 ```
 
-Menampilkan isi pesan yang diterima di terminal.
+Menampilkan isi pesan yang diterima.
 
-Bagian main sama seperti publisher:
+### Fungsi main
 
-* Inisialisasi ROS 2
-* Membuat node Subscriber
-* Menjalankan node dengan `spin()`
-* Shutdown dengan aman
+Struktur sama seperti publisher:
+
+* Inisialisasi ROS
+* Membuat node
+* Spin
+* Shutdown
 
 ---
 
 # STEP 6 — Edit package.xml
 
-Tambahkan:
+Tambahkan dependensi:
 
 ```xml
 <exec_depend>rclpy</exec_depend>
 <exec_depend>std_msgs</exec_depend>
 ```
 
+Penjelasan:
+
+* `rclpy` diperlukan untuk menjalankan node Python.
+* `std_msgs` diperlukan untuk menggunakan tipe pesan `String`.
+
 ---
 
 # STEP 7 — Edit setup.py
+
+Tambahkan entry point:
 
 ```python
 entry_points={
@@ -355,33 +354,46 @@ entry_points={
 },
 ```
 
+Penjelasan:
+
+* `talker` adalah nama executable untuk publisher.
+* `listener` adalah nama executable untuk subscriber.
+* `py_pubsub.publisher:main` menunjuk ke fungsi `main()` di file publisher.py.
+
 ---
 
 # STEP 8 — Build
+
+Kembali ke root workspace:
 
 ```bash
 cd ../../
 colcon build
 ```
 
+Proses ini akan:
+
+* Mengompilasi package
+* Membuat folder build
+* Membuat folder install
+* Membuat folder log
+
 ---
 
-# STEP 9 — Jalankan Publisher
+# STEP 9 — Menjalankan Publisher
 
 ```bash
 source install/setup.bash
 ros2 run py_pubsub talker
 ```
 
-Output:
-
-![Gambar Publisher](asset/publisher.png)
+Publisher akan mengirim pesan setiap 1 detik.
 
 ---
 
-# STEP 10 — Jalankan Subscriber
+# STEP 10 — Menjalankan Subscriber
 
-Terminal 2:
+Terminal baru:
 
 ```bash
 cd ros2_ws
@@ -389,12 +401,18 @@ source install/setup.bash
 ros2 run py_pubsub listener
 ```
 
-Output:
-
-![Gambar Subscriber](asset/subscriber.png)
+Subscriber akan menerima dan menampilkan pesan dari topic.
 
 ---
 
+
+# Referensi
+
+Tutorial resmi ROS 2:
+
+[https://docs.ros.org/en/foxy/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html](https://docs.ros.org/en/foxy/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html)
+
+---
 # TUGAS KINGGGGG
 Berdasarkan project yang telah dibuat, lakukan pengembangan sistem menjadi:
 
