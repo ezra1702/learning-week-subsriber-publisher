@@ -415,14 +415,6 @@ Subscriber akan menerima dan menampilkan pesan dari topic.
 
 ---
 
-# Referensi
-
-Tutorial resmi ROS 2:
-
-[https://docs.ros.org/en/foxy/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html](https://docs.ros.org/en/foxy/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html)
-
----
-
 
 # TUGAS KINGGGGG
 Berdasarkan project yang telah dibuat, lakukan pengembangan sistem menjadi:
@@ -469,6 +461,10 @@ Contoh:
 [TOPIC2] From Publisher 2: 0
 [TOPIC1] From Publisher 1: 1
 ```
+# Referensi
 
-# Refrensi
-https://docs.ros.org/en/foxy/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html
+Tutorial resmi ROS 2:
+
+[https://docs.ros.org/en/foxy/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html](https://docs.ros.org/en/foxy/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html)
+
+---
