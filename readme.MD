@@ -440,3 +440,6 @@ Contoh:
 [TOPIC2] From Publisher 2: 0
 [TOPIC1] From Publisher 1: 1
 ```
+
+# Refrensi
+https://docs.ros.org/en/foxy/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html
