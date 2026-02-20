@@ -389,7 +389,12 @@ ros2 run py_pubsub talker
 
 Publisher akan mengirim pesan setiap 1 detik.
 
+
+Output :
+![Publisher](assets/publisher.png)
+
 ---
+
 
 # STEP 10 — Menjalankan Subscriber
 
@@ -402,6 +407,9 @@ ros2 run py_pubsub listener
 ```
 
 Subscriber akan menerima dan menampilkan pesan dari topic.
+
+Output :
+![Subscriber](assets/subscriber.png)
 
 ---
 
